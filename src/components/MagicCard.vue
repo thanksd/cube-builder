@@ -16,13 +16,16 @@ const props = defineProps({
           {{ props.title }}
         </div>
         <div class="art">
+          <img :src="props.img">
           {{ props.img }}
         </div>
         <div class="type-line">
           {{ props.type }}
         </div>
-        <div class="rules-text">
-          {{ props.rules }}
+        <div class="rules-container">
+          <div class="rules-text">
+            {{ props.rules }}
+          </div>
         </div>
         <div class="footer">
           Illus. {{ props.author }}
@@ -33,7 +36,10 @@ const props = defineProps({
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
 .card {
+  font-family: 'Libre Baskerville', serif;
   position: relative;
   font-size: .79rem;
   width: 25em;
@@ -62,7 +68,7 @@ const props = defineProps({
 }
 
 .title {
-  font-size: 1rem;
+  font-size: 0.85rem;
   height: 1.4rem;
   line-height: 1.4rem;;
 }
@@ -71,15 +77,32 @@ const props = defineProps({
   background: yellow;
   height: 50%;
   margin: 0 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.art img {
+  position: relative;
+  width: 100%;
+}
+
+.rules-container {
+  flex-grow: 1;
+  margin: 0 1rem;
+  background-color: antiquewhite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  line-height: 0.9rem;
 }
 
 .rules-text {
-  flex-grow: 1;
-  margin: 0 1rem;
-  background-color: antiquewhite
+  margin: 0 0.4rem;
 }
 
 .footer {
+  font-size: 0.7rem;
   text-align: center;
 }
 </style>
