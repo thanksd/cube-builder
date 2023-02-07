@@ -29,6 +29,7 @@
   height: 35em;
   background-color: black;
   border-radius: 1em;
+  user-select: none;
 }
 
 .content {
