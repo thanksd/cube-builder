@@ -1,20 +1,31 @@
+<script setup lang="ts">
+const props = defineProps({
+  title: String,
+  img: String,
+  type: String,
+  rules: String,
+  author: String
+})
+</script>
+
 <template>
   <div class="magic-card">
     <div class="card">
       <div class="content">
         <div class="title">
-          Plains
+          {{ props.title }}
         </div>
         <div class="art">
-          (img goes here)
+          {{ props.img }}
         </div>
         <div class="type-line">
-          Basic Land --- Plains
+          {{ props.type }}
         </div>
         <div class="rules-text">
+          {{ props.rules }}
         </div>
         <div class="footer">
-          Illus. John Avon
+          Illus. {{ props.author }}
         </div>
       </div>
     </div>

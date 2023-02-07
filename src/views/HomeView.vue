@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { ref, type Ref } from 'vue'
 import MagicCard from '../components/MagicCard.vue'
+import cards from '../data/cards'
 
+const card = ref(cards[0])
 const leftPane: Ref<HTMLElement | null> = ref(null)
 const gutter: Ref<HTMLElement | null> = ref(null)
 
@@ -25,14 +27,19 @@ function resizer(e: any) {
   }
 }
 
-console.log({ gutter: gutter })
 gutter.value?.addEventListener('mousedown', resizer);
 </script>
 
 <template>
   <main>
     <section class="card-section" ref="leftPane">
-      <MagicCard></MagicCard>
+      <MagicCard
+        :title="card.title"
+        :img="card.img"
+        :type="card.type"
+        :rules="card.rules"
+        :author="card.author"
+      />
     </section>
     <section class="config-section">
       Here goes the config
