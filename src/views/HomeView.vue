@@ -61,11 +61,13 @@ main {
   align-items: center;
   width: 50%;
   min-width: 200px;
+  background-color: #2e2727;
 }
 
 .config-section {
   position: relative;
-  background-color: cornflowerblue;
+  color: seashell;
+  background-color: #0f0d0c;
   min-width: 200px;
   padding: 1rem;
   flex-grow: 1;
@@ -75,7 +77,7 @@ main {
   position: absolute;
   width: 1rem;
   height: 100%;
-  background-color: cornflowerblue;
+  background-color: #0f0d0c;
   top: 0;
   left: 0;
   cursor: col-resize;
