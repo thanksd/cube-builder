@@ -5,7 +5,6 @@ import cards from '../data/cards'
 
 const card = ref(cards[0])
 const leftPane: Ref<HTMLElement | null> = ref(null)
-const gutter: Ref<HTMLElement | null> = ref(null)
 
 function resizer(e: any) {
   window.addEventListener('mousemove', mousemove);
@@ -27,12 +26,19 @@ function resizer(e: any) {
   }
 }
 
-gutter.value?.addEventListener('mousedown', resizer);
+function onMouseMove(e: any) {
+  console.log(leftPane.value?.style)
+  const { width = 0, height = 0 } = leftPane.value?.getBoundingClientRect() || {};
+  const x = e.clientX / width;
+  const y = e.clientY / height;
+  document.documentElement.style.setProperty('--mouse-x', String(x));
+  document.documentElement.style.setProperty('--mouse-y', String(y));
+}
 </script>
 
 <template>
   <main>
-    <section class="card-section" ref="leftPane">
+    <section class="card-section" ref="leftPane" @mousemove="onMouseMove">
       <MagicCard
         :title="card.title"
         :img="card.img"

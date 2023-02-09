@@ -35,10 +35,15 @@ const props = defineProps({
   </div>
 </template>
 
-<style scoped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 .card {
+  --deg: 25deg;
+  --dist-x: (var(--mouse-x) - 0.5 * 1deg);
+  /* --dist-y: abs(calc(var(--mouse-x) - 0.5));
+  --rotation: calc((var(--dist-x) + var(--dist-y)) * var(--deg)); */
+
   font-family: 'Libre Baskerville', serif;
   position: relative;
   font-size: .79rem;
@@ -47,6 +52,8 @@ const props = defineProps({
   background-color: black;
   border-radius: 1em;
   user-select: none;
+  /* transform: rotate3d(1, 1, 1, var(--rotation)deg); */
+  transform: rotate3d(1, 1, 1, calc(var(--dist-x)));
 }
 
 .content {
