@@ -39,10 +39,12 @@ const props = defineProps({
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 .card {
-  --deg: 25deg;
-  --dist-x: (var(--mouse-x) - 0.5 * 1deg);
-  /* --dist-y: abs(calc(var(--mouse-x) - 0.5));
-  --rotation: calc((var(--dist-x) + var(--dist-y)) * var(--deg)); */
+  --deg: 50deg;
+  --x: calc(var(--mouse-x) - 0.5);
+  --y: calc(var(--mouse-y) - 0.5);
+  --deg-x: calc(-1.2 * var(--deg) * var(--x));
+  --deg-y: calc(1.2 * var(--deg) * var(--y));
+  --deg-z: calc(var(--deg) * calc(var(--y) / 6 * var(--x) / 2));
 
   font-family: 'Libre Baskerville', serif;
   position: relative;
@@ -52,8 +54,10 @@ const props = defineProps({
   background-color: black;
   border-radius: 1em;
   user-select: none;
-  /* transform: rotate3d(1, 1, 1, var(--rotation)deg); */
-  transform: rotate3d(1, 1, 1, calc(var(--dist-x)));
+  transform:
+    rotate3d(-1, 0, 0, var(--deg-y))
+    rotate3d(0, -1, 0, var(--deg-x))
+    rotate3d(0, 0, 1, var(--deg-z));
 }
 
 .content {
