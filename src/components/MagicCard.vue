@@ -16,11 +16,11 @@ let updateDegInterval: number;
 
 function updateDeg() {
   const value = props.positionLocked ? 0 : 50
-  const deg = parseFloat(getComputedStyle(card.value).getPropertyValue('--deg'))
-  const delta = (value - deg) / 60
-  const done = Math.abs(deg - value) < 1
-  const newValue = done ? value : (deg + delta)
-  card.value.style.setProperty('--deg', newValue + 'deg')
+  const n = parseFloat(getComputedStyle(card.value).getPropertyValue('--n'))
+  const delta = (value - n) / 60
+  const done = Math.abs(n - value) < 1
+  const newValue = done ? value : (n + delta)
+  card.value.style.setProperty('--n', newValue)
 
   if (done) clearInterval(updateDegInterval)
 }
@@ -65,9 +65,10 @@ watch(() => props.positionLocked, () => {
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 .card {
-  --deg: 0deg;
-  --x: calc(var(--mouse-x) - 0.5);
-  --y: calc(var(--mouse-y) - 0.5);
+  --n: 0;
+  --deg: calc(var(--n) * 1deg);
+  --x: calc(var(--mouse-x, 0.5) - 0.5);
+  --y: calc(var(--mouse-y, 0.5) - 0.5);
   --deg-x: calc(-1.2 * var(--deg) * var(--x));
   --deg-y: calc(1.2 * var(--deg) * var(--y));
   --deg-z: calc(var(--deg) * calc(var(--y) / 6 * var(--x) / 2));
@@ -84,6 +85,26 @@ watch(() => props.positionLocked, () => {
     rotate3d(-1, 0, 0, var(--deg-y))
     rotate3d(0, -1, 0, var(--deg-x))
     rotate3d(0, 0, 1, var(--deg-z));
+
+  --shadow-blur: 100px;
+  --shadow-length: -10px;
+  --shadow-color: rgba(0,0,0,0.08);
+  box-shadow:
+    calc(30px - (var(--x) * var(--n) * 1px))
+    calc(30px - (var(--y) * var(--n) * 1px))
+    var(--shadow-blur) var(--shadow-length) var(--shadow-color),
+    calc(50px - (var(--x) * var(--n) * 5px))
+    calc(30px - (var(--y) * var(--n) * 3px))
+    var(--shadow-blur) var(--shadow-length) var(--shadow-color),
+    calc(30px - (var(--x) * var(--n) * 3px))
+    calc(50px - (var(--y) * var(--n) * 5px))
+    var(--shadow-blur) var(--shadow-length) var(--shadow-color),
+    calc(30px - (var(--x) * var(--n) * 3px))
+    calc(-20px - (var(--y) * var(--n) * 2px))
+    var(--shadow-blur) var(--shadow-length) var(--shadow-color),
+    calc(-20px - (var(--x) * var(--n) * 2px))
+    calc(30px - (var(--y) * var(--n) * 3px))
+    var(--shadow-blur) var(--shadow-length) var(--shadow-color);
 }
 
 .content {
