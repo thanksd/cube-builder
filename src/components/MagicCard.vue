@@ -1,16 +1,42 @@
 <script setup lang="ts">
+import { watch, ref } from 'vue';
+
 const props = defineProps({
-  title: String,
-  img: String,
-  type: String,
-  rules: String,
-  author: String
+  title: { type: String, default: '' },
+  img: { type: String, default: ' '},
+  type: { type: String, default: ' '},
+  rules: { type: String, default: ' '},
+  author: { type: String, default: ' '},
+  positionLocked: { type: Boolean, default: true }
+})
+
+const card = ref();
+
+let updateDegInterval: number;
+
+function updateDeg() {
+  const value = props.positionLocked ? 0 : 50
+  const deg = parseFloat(getComputedStyle(card.value).getPropertyValue('--deg'))
+  const delta = (value - deg) / 60
+  const done = Math.abs(deg - value) < 1
+  const newValue = done ? value : (deg + delta)
+  card.value.style.setProperty('--deg', newValue + 'deg')
+
+  if (done) clearInterval(updateDegInterval)
+}
+
+watch(() => props.positionLocked, () => {
+  if (updateDegInterval) clearInterval(updateDegInterval)
+  updateDegInterval = setInterval(updateDeg)
 })
 </script>
 
 <template>
   <div class="magic-card">
-    <div class="card">
+    <div
+      ref="card"
+      class="card"
+    >
       <div class="content">
         <div class="title">
           {{ props.title }}
@@ -39,7 +65,7 @@ const props = defineProps({
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 .card {
-  --deg: 50deg;
+  --deg: 0deg;
   --x: calc(var(--mouse-x) - 0.5);
   --y: calc(var(--mouse-y) - 0.5);
   --deg-x: calc(-1.2 * var(--deg) * var(--x));

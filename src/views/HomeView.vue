@@ -5,6 +5,7 @@ import cards from '../data/cards'
 
 const card = ref(cards[0])
 const leftPane: Ref<HTMLElement | null> = ref(null)
+const cardPositionLocked = ref(true)
 
 function resizer(e: any) {
   window.addEventListener('mousemove', mousemove);
@@ -27,19 +28,33 @@ function resizer(e: any) {
 }
 
 function onMouseMove(e: any) {
-  console.log(leftPane.value?.style)
   const { width = 0, height = 0 } = leftPane.value?.getBoundingClientRect() || {};
   const x = e.clientX / width;
   const y = e.clientY / height;
   document.documentElement.style.setProperty('--mouse-x', String(x));
   document.documentElement.style.setProperty('--mouse-y', String(y));
 }
+
+function onMouseEnter() {
+  cardPositionLocked.value = false
+}
+
+function onMouseLeave() {
+  cardPositionLocked.value = true
+}
 </script>
 
 <template>
   <main>
-    <section class="card-section" ref="leftPane" @mousemove="onMouseMove">
+    <section
+      ref="leftPane"
+      class="card-section"
+      @mousemove="onMouseMove"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+    >
       <MagicCard
+        :position-locked="cardPositionLocked"
         :title="card.title"
         :img="card.img"
         :type="card.type"
@@ -49,7 +64,10 @@ function onMouseMove(e: any) {
     </section>
     <section class="config-section">
       Here goes the config
-      <div class="gutter" @mousedown="resizer"></div>
+      <div
+        class="gutter"
+        @mousedown="resizer"
+      />
     </section>
   </main>
 </template>
