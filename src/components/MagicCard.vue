@@ -22,12 +22,12 @@ function updateDeg() {
   const newValue = done ? value : (n + delta)
   card.value.style.setProperty('--n', newValue)
 
-  if (done) clearInterval(updateDegInterval)
+  if (done) window.clearInterval(updateDegInterval)
 }
 
 watch(() => props.positionLocked, () => {
-  if (updateDegInterval) clearInterval(updateDegInterval)
-  updateDegInterval = setInterval(updateDeg)
+  if (updateDegInterval) window.clearInterval(updateDegInterval)
+  updateDegInterval = window.setInterval(updateDeg)
 })
 </script>
 
