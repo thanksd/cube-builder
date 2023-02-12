@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue';
+import { useCardStore } from '@/stores/card';
 
 const props = defineProps({
-  title: { type: String, default: '' },
-  img: { type: String, default: ' '},
-  type: { type: String, default: ' '},
-  rules: { type: String, default: ' '},
-  author: { type: String, default: ' '},
   positionLocked: { type: Boolean, default: true }
 })
 
-const card = ref();
+const { card } = useCardStore()
+
+const cardEl = ref();
 
 let updateDegInterval: number;
 
 function updateDeg() {
   const value = props.positionLocked ? 0 : 50
-  const n = parseFloat(getComputedStyle(card.value).getPropertyValue('--n'))
+  const n = parseFloat(getComputedStyle(cardEl.value).getPropertyValue('--n'))
   const delta = (value - n) / 60
   const done = Math.abs(n - value) < 1
   const newValue = done ? value : (n + delta)
-  card.value.style.setProperty('--n', newValue)
+  cardEl.value.style.setProperty('--n', newValue)
 
   if (done) window.clearInterval(updateDegInterval)
 }
@@ -34,27 +32,27 @@ watch(() => props.positionLocked, () => {
 <template>
   <div class="magic-card">
     <div
-      ref="card"
+      ref="cardEl"
       class="card"
     >
       <div class="content">
         <div class="title">
-          {{ props.title }}
+          {{ card.title }}
         </div>
         <div class="art">
-          <img :src="props.img">
-          {{ props.img }}
+          <img :src="card.img">
+          {{ card.img }}
         </div>
         <div class="type-line">
-          {{ props.type }}
+          {{ card.type }}
         </div>
         <div class="rules-container">
           <div class="rules-text">
-            {{ props.rules }}
+            {{ card.rules }}
           </div>
         </div>
         <div class="footer">
-          Illus. {{ props.author }}
+          Illus. {{ card.author }}
         </div>
       </div>
     </div>
@@ -132,7 +130,6 @@ watch(() => props.positionLocked, () => {
 }
 
 .art {
-  background: yellow;
   height: 50%;
   margin: 0 1rem;
   overflow: hidden;

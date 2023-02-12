@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, onMounted, type Ref } from 'vue'
 import MagicCard from '../components/MagicCard.vue'
+import ConfigPanel from '../components/ConfigPanel.vue'
 import cards from '../data/cards'
+import { useAppStore } from '../stores/app';
 
 const card = ref(cards[0])
 const leftPane: Ref<HTMLElement | null> = ref(null)
@@ -63,7 +65,7 @@ function onMouseLeave() {
       />
     </section>
     <section class="config-section">
-      Here goes the config
+      <ConfigPanel />
       <div
         class="gutter"
         @mousedown="resizer"
@@ -76,7 +78,6 @@ function onMouseLeave() {
 main {
   display: flex;
   min-height: 100vh;
-  min-width: 100vh;
 }
 
 .card-section {
@@ -92,7 +93,7 @@ main {
   position: relative;
   color: seashell;
   background-color: #0f0d0c;
-  min-width: 200px;
+  /* min-width: 200px; */
   padding: 1rem;
   flex-grow: 1;
 }
