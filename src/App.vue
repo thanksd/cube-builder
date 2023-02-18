@@ -4,8 +4,8 @@ import LoginView from './views/LoginView.vue';
 import { RouterView } from 'vue-router'
 import { useAppStore } from './stores/app'
 
-const loading = ref(true)
 const { initApp, session } = useAppStore()
+const loading = ref(true)
 
 onMounted(async() => {
   await initApp()
