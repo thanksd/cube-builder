@@ -1,8 +1,10 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 
+
 type Card = {
   id: number;
+  created_at: string;
   title: string;
   img: string;
   type: string;
@@ -13,6 +15,7 @@ type Card = {
 export const useCardStore = defineStore('card', () => {
   const card: Ref<Card> = ref({
     id: 0,
+    created_at: '',
     title: '',
     img: '',
     type: '',

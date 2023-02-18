@@ -20,6 +20,7 @@
   "devDependencies": {
     "@playwright/test": "^1.28.1",
     "@rushstack/eslint-patch": "^1.1.4",
+    "@supabase/supabase-js": "^2.8.0",
     "@types/jsdom": "^20.0.1",
     "@types/node": "^18.11.12",
     "@vitejs/plugin-vue": "^4.0.0",

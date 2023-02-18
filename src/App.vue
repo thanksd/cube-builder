@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import LoginView from './views/LoginView.vue';
 import { RouterView } from 'vue-router'
 import { useAppStore } from './stores/app'
 
 const loading = ref(true)
-const { initApp } = useAppStore()
+const { initApp, session } = useAppStore()
 
 onMounted(async() => {
   await initApp()
@@ -13,5 +14,6 @@ onMounted(async() => {
 </script>
 
 <template>
-  <RouterView v-show="!loading" />
+  <RouterView v-if="!loading && session" />
+  <LoginView v-if="!loading && !session" />
 </template>
