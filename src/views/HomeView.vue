@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import MagicCard from '../components/MagicCard.vue'
 import ConfigPanel from '../components/ConfigPanel.vue'
 import cards from '../data/cards'
-import { useAppStore } from '../stores/app';
 
 const card = ref(cards[0])
 const leftPane: Ref<HTMLElement | null> = ref(null)
@@ -77,7 +76,6 @@ function onMouseLeave() {
 <style scoped>
 main {
   display: flex;
-  min-height: 100vh;
 }
 
 .card-section {

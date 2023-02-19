@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import LoginView from './views/LoginView.vue';
 import { RouterView } from 'vue-router'
+import AppNavbar from './components/Navbar/AppNavbar.vue';
 import { useAppStore } from './stores/app'
 
 const app = useAppStore()
@@ -14,6 +14,23 @@ onMounted(async() => {
 </script>
 
 <template>
-  <RouterView v-if="!loading && app.session" />
-  <LoginView v-if="!loading && !app.session" />
+  <div id="app">
+    <AppNavbar />
+    <RouterView
+      v-if="!loading"
+      id="view"
+    />
+  </div>
 </template>
+
+<style scoped>
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#view {
+  flex: 1;
+}
+</style>
