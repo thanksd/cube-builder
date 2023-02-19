@@ -13,14 +13,18 @@ const cardEl = ref();
 let updateDegInterval: number;
 
 function updateDeg() {
-  const value = props.positionLocked ? 0 : 50
-  const n = parseFloat(getComputedStyle(cardEl.value).getPropertyValue('--n'))
-  const delta = (value - n) / 60
-  const done = Math.abs(n - value) < 1
-  const newValue = done ? value : (n + delta)
-  cardEl.value.style.setProperty('--n', newValue)
+  try {
+    const value = props.positionLocked ? 0 : 50
+    const n = parseFloat(getComputedStyle(cardEl.value).getPropertyValue('--n'))
+    const delta = (value - n) / 60
+    const done = Math.abs(n - value) < 1
+    const newValue = done ? value : (n + delta)
+    cardEl.value.style.setProperty('--n', newValue)
 
-  if (done) window.clearInterval(updateDegInterval)
+    if (done) window.clearInterval(updateDegInterval)
+  } catch (e: any) {
+    window.clearInterval(updateDegInterval)
+  }
 }
 
 watch(() => props.positionLocked, () => {
