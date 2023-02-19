@@ -4,16 +4,16 @@ import LoginView from './views/LoginView.vue';
 import { RouterView } from 'vue-router'
 import { useAppStore } from './stores/app'
 
-const { initApp, session } = useAppStore()
+const app = useAppStore()
 const loading = ref(true)
 
 onMounted(async() => {
-  await initApp()
+  await app.initApp()
   loading.value = false
 })
 </script>
 
 <template>
-  <RouterView v-if="!loading && session" />
-  <LoginView v-if="!loading && !session" />
+  <RouterView v-if="!loading && app" />
+  <LoginView v-if="!loading && !app" />
 </template>
