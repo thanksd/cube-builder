@@ -14,6 +14,6 @@ onMounted(async() => {
 </script>
 
 <template>
-  <RouterView v-if="!loading && app" />
-  <LoginView v-if="!loading && !app" />
+  <RouterView v-if="!loading && app.session" />
+  <LoginView v-if="!loading && !app.session" />
 </template>
