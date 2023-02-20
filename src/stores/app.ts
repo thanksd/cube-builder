@@ -42,21 +42,27 @@ export const useAppStore = defineStore('app', () => {
     cardStore.setCard(cards?.[0])
   }
 
-  async function updateProfileAvatar(avatarUrl: string) {
+  async function updateProfile(params: any) {
     const { error } = await supabase
       .from('profiles')
-      .update({ avatar_url: avatarUrl })
+      .update(params)
       .eq('id', profile.value.id)
+
+    if (error) throw error
+  }
+
+  async function updateProfileAvatar(avatarUrl: string) {
+    await updateProfile({ avatar_url: avatarUrl })
 
     profile.value.avatar_url = avatarUrl;
 
-    if (error) throw error;
   }
 
   return {
     session,
     profile,
     initApp,
+    updateProfile,
     updateProfileAvatar
   }
 })
