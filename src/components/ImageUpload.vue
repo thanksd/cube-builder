@@ -1,26 +1,16 @@
 <script setup lang="ts">
-import { ref, toRefs, watch } from 'vue'
+import { ref, toRefs } from 'vue'
 import { supabase } from '../lib/supabaseClient'
 
 const prop = defineProps({
-  path: { type: String, default: '' }
+  showPreview: { type: Boolean, default: true }
 })
-const { path } = toRefs(prop)
+const { showPreview } = toRefs(prop)
 
 const emit = defineEmits(['upload', 'update:path'])
 const uploading = ref(false)
 const src = ref('')
 const files = ref()
-
-const downloadImage = async () => {
-  try {
-    const { data, error } = await supabase.storage.from('avatars').download(path.value)
-    if (error) throw error
-    src.value = URL.createObjectURL(data)
-  } catch (error: any) {
-    console.error('Error downloading image: ', error.message)
-  }
-}
 
 const uploadAvatar = async (e: any) => {
   files.value = e.target.files
@@ -37,24 +27,21 @@ const uploadAvatar = async (e: any) => {
     let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
     if (uploadError) throw uploadError
-    emit('update:path', filePath)
-    emit('upload')
+    src.value = URL.createObjectURL(file)
+
+    emit('upload', { filePath, file })
   } catch (error: any) {
     alert(error.message)
   } finally {
     uploading.value = false
   }
 }
-
-watch(path, () => {
-  if (path.value) downloadImage()
-})
 </script>
 
 <template>
   <div>
     <img
-      v-if="src"
+      v-if="src && showPreview"
       :src="src"
       alt="Avatar"
     >

@@ -32,7 +32,7 @@ export const useAppStore = defineStore('app', () => {
 
   async function initApp() {
     const { data } = await supabase.auth.getSession();
-    setupSession(data.session)
+    await setupSession(data.session)
 
     supabase.auth.onAuthStateChange((_, _session) => {
       setupSession(_session)
@@ -47,6 +47,8 @@ export const useAppStore = defineStore('app', () => {
       .from('profiles')
       .update({ avatar_url: avatarUrl })
       .eq('id', profile.value.id)
+
+    profile.value.avatar_url = avatarUrl;
 
     if (error) throw error;
   }
