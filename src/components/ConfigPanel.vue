@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import { useCardStore } from '../stores/card'
+import { ref } from 'vue'
+import type { Card } from '@/stores/cards';
 
-const { card } = useCardStore();
+const props = defineProps({
+  card: { type: Object as () => Card, required: true }
+})
+
+const card = ref(Object.assign({}, props.card))
+
 </script>
 
 <template>

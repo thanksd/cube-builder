@@ -75,8 +75,4 @@ main {
   gap: 1rem;
   font-family: monospace;
 }
-
-h1 {
-  font-size: 1.4em;
-}
 </style>

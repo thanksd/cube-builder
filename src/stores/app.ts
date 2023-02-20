@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useCardStore } from './card'
+import { useCardsStore, type Card } from './cards'
 import { supabase } from '../lib/supabaseClient'
 
 type User = {
@@ -28,7 +28,7 @@ async function setupSession(_session: Session | null) {
 }
 
 export const useAppStore = defineStore('app', () => {
-  const cardStore = useCardStore()
+  const cardsStore = useCardsStore()
 
   async function initApp() {
     const { data } = await supabase.auth.getSession();
@@ -38,8 +38,7 @@ export const useAppStore = defineStore('app', () => {
       setupSession(_session)
     })
 
-    const { data: cards } = await supabase.from('cards').select()
-    cardStore.setCard(cards?.[0])
+    await cardsStore.loadCards()
   }
 
   async function updateProfile(params: any) {

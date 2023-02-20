@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue';
-import { useCardStore } from '@/stores/card';
+import type { Card } from '@/stores/cards';
 
 const props = defineProps({
+  card: { type: Object as () => Card, required: true },
   positionLocked: { type: Boolean, default: true }
 })
 
-const { card } = useCardStore()
-
+const card = ref(Object.assign({}, props.card))
 const cardEl = ref();
 
 let updateDegInterval: number;

@@ -33,4 +33,12 @@ onMounted(async() => {
 #view {
   flex: 1;
 }
+
+main {
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
 </style>

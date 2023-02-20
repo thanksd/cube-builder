@@ -12,7 +12,7 @@ const app = useAppStore()
 
     <RouterLink
       class="router-link"
-      :to="app.session ? 'profile' : 'login'"
+      :to="app.session ? '/profile' : '/login'"
     >
       {{ app.session ? 'profile' : 'login' }}
     </RouterLink>

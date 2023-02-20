@@ -1,108 +1,66 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import MagicCard from '../components/MagicCard.vue'
-import ConfigPanel from '../components/ConfigPanel.vue'
-import cards from '../data/cards'
+import { ref } from 'vue'
+import { useAppStore } from '@/stores/app'
+import { useCardsStore } from '@/stores/cards'
+import { useRouter } from 'vue-router'
 
-const card = ref(cards[0])
-const leftPane: Ref<HTMLElement | null> = ref(null)
-const cardPositionLocked = ref(true)
+const cardsStore = useCardsStore()
+const appStore = useAppStore()
+const router = useRouter()
 
-function resizer(e: any) {
-  window.addEventListener('mousemove', mousemove);
-  window.addEventListener('mouseup', mouseup);
+const creating = ref(false)
+const cards = ref(cardsStore.cards)
 
-  const prevX = e.x;
-  const { width = 0 } = leftPane.value?.getBoundingClientRect() || {};
-
-  function mousemove(e: any) {
-    if (leftPane.value) {
-      const newX = prevX - e.x;
-      leftPane.value.style.width = `${width - newX}px`;
-    }
+async function onCreateClick() {
+  creating.value = true
+  try {
+    const userId = appStore.profile.id
+    const { id } = await cardsStore.createCard({ userId })
+    router.push({ name: 'card', params: { id }})
+  } catch (e: any) {
+    if (e && e?.message) alert(e.message)
+  } finally {
+    creating.value = false
   }
-
-  function mouseup() {
-    window.removeEventListener('mousemove', mousemove);
-    window.removeEventListener('mouseup', mouseup);
-  }
-}
-
-function onMouseMove(e: any) {
-  const { width = 0, height = 0 } = leftPane.value?.getBoundingClientRect() || {};
-  const x = e.clientX / width;
-  const y = e.clientY / height;
-  document.documentElement.style.setProperty('--mouse-x', String(x));
-  document.documentElement.style.setProperty('--mouse-y', String(y));
-}
-
-function onMouseEnter() {
-  cardPositionLocked.value = false
-}
-
-function onMouseLeave() {
-  cardPositionLocked.value = true
 }
 </script>
 
 <template>
   <main>
-    <section
-      ref="leftPane"
-      class="card-section"
-      @mousemove="onMouseMove"
-      @mouseenter="onMouseEnter"
-      @mouseleave="onMouseLeave"
+    <h1>Cards</h1>
+
+    <RouterLink
+      v-for="[id, card] of cards"
+      :key="id"
+      :to="{ name: 'card', params: { id }}"
     >
-      <MagicCard
-        :position-locked="cardPositionLocked"
-        :title="card.title"
-        :img="card.img"
-        :type="card.type"
-        :rules="card.rules"
-        :author="card.author"
-      />
-    </section>
-    <section class="config-section">
-      <ConfigPanel />
-      <div
-        class="gutter"
-        @mousedown="resizer"
-      />
-    </section>
+      {{ card.title }} ({{ id }})
+    </RouterLink>
+
+    <button
+      v-if="appStore.session"
+      :disabled="creating"
+      @click="onCreateClick"
+    >
+      Create Card
+    </button>
+    <RouterLink
+      v-else
+      to="/login"
+    >
+      (login to create new cards)
+    </RouterLink>
   </main>
 </template>
 
 <style scoped>
 main {
   display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
-.card-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
-  min-width: 200px;
-  background-color: #2e2727;
-}
-
-.config-section {
-  position: relative;
-  color: seashell;
-  background-color: #0f0d0c;
-  /* min-width: 200px; */
-  padding: 1rem;
-  flex-grow: 1;
-}
-
-.gutter {
-  position: absolute;
-  width: 1rem;
-  height: 100%;
-  background-color: #0f0d0c;
-  top: 0;
-  left: 0;
-  cursor: col-resize;
+button {
+  max-width: 10em;
 }
 </style>
