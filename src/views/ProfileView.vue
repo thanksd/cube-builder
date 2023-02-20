@@ -15,7 +15,6 @@ function updateAvatar({ filePath, file }: { filePath: string, file: Blob }) {
 onMounted(async () => {
   const { profile } = app;
   const { data, error } = await supabase.storage.from('avatars').download(profile['avatar_url'])
-  console.log({ data })
   if (error) throw error
   avatarUrl.value = URL.createObjectURL(data)
 })
@@ -23,20 +22,16 @@ onMounted(async () => {
 
 <template>
   <main>
-    <img
-      :src="avatarUrl"
-      alt="profile avatar"
-    >
+    <h1>Profile Settings</h1>
 
     <ImageUpload
-      :show-preview="false"
+      v-model:src="avatarUrl"
+      :max-width="100"
+      :max-height="100"
       @upload="updateAvatar"
     />
   </main>
 </template>
 
 <style scoped>
-img {
-  height: 300px;
-}
 </style>
