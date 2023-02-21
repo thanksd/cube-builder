@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Card } from '@/stores/cards';
+import type { Card } from '@/stores/cards'
+import { useCardsStore } from '@/stores/cards'
+
+const cardsStore = useCardsStore()
 
 const props = defineProps({
   card: { type: Object as () => Card, required: true }
 })
 
 const card = ref(Object.assign({}, props.card))
+
+async function onDelete() {
+  cardsStore.deleteCard({ id: card.value.id })
+}
+
+async function onSave() {
+
+}
 
 </script>
 
@@ -15,7 +26,7 @@ const card = ref(Object.assign({}, props.card))
     <h1>Config Panel</h1>
     <hr>
 
-    <div class="config-panel__body">
+    <div class="body">
       <label>
         <div>Title</div>
         <input v-model="card.title">
@@ -44,6 +55,15 @@ const card = ref(Object.assign({}, props.card))
         <input v-model="card.author">
       </label>
     </div>
+
+    <footer>
+      <button @click="onDelete">
+        Delete
+      </button>
+      <button @click="onSave">
+        Save
+      </button>
+    </footer>
   </div>
 </template>
 
@@ -55,7 +75,7 @@ const card = ref(Object.assign({}, props.card))
   font-family: monospace;
 }
 
-.config-panel__body {
+.body {
   display: flex;
   flex-direction: column;
   gap: 1em;

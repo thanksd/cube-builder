@@ -47,10 +47,20 @@ export const useCardsStore = defineStore('cards', () => {
     return { id: card.id }
   }
 
+  async function deleteCard({ id }: { id: number }) {
+    const { error } = await supabase
+      .from('cards')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error;
+  }
+
   return {
     cards,
     loadCards,
     updateCard,
-    createCard
+    createCard,
+    deleteCard
   }
 })
