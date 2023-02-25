@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import MagicCard from '../components/MagicCard.vue'
 import ConfigPanel from '../components/ConfigPanel.vue'
 import { useCardsStore } from '@/stores/cards';
@@ -8,9 +8,14 @@ import { useRoute } from 'vue-router'
 const cardStore = useCardsStore()
 const route = useRoute()
 
-const card = ref(cardStore.cards.get(+route.params.id))
+const card = ref()
 const leftPane: Ref<HTMLElement | null> = ref(null)
 const cardPositionLocked = ref(true)
+
+watch(() => route.params.id, (value) => {
+  card.value = cardStore.cards.get(+value)
+  if (card.value) cardStore.activeCard = card.value
+}, { immediate: true })
 
 function resizer(e: any) {
   window.addEventListener('mousemove', mousemove);

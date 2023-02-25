@@ -15,6 +15,11 @@ export type Card = {
 export const useCardsStore = defineStore('cards', () => {
   const cards: Ref<Map<number, Card>> = ref(new Map())
 
+  /**
+   * The card data actively being editted and updated in app memory before saving to the backend
+   */
+  const activeCard: Ref<Card | null> = ref(null)
+
   async function loadCards() {
     const { data } = await supabase.from('cards').select()
     if (!Array.isArray(data)) return
@@ -68,7 +73,11 @@ export const useCardsStore = defineStore('cards', () => {
   }
 
   return {
+    // state
     cards,
+    activeCard,
+
+    // methods
     loadCards,
     updateCard,
     createCard,

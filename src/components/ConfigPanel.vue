@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Card } from '@/stores/cards'
 import { useCardsStore } from '@/stores/cards'
 
 const cardsStore = useCardsStore()
 
-const props = defineProps({
-  card: { type: Object as () => Card, required: true }
-})
+const card = ref(cardsStore.activeCard)
 
-const card = ref(Object.assign({}, props.card))
+const saving = ref(false)
+const deleting = ref(false)
 
 async function onDelete() {
-  cardsStore.deleteCard({ id: card.value.id })
+  if (card.value) cardsStore.deleteCard({ id: card.value.id })
 }
 
 async function onSave() {
-  cardsStore.updateCard({ id: card.value.id, data: card.value })
+  saving.value = true
+  if (card.value) cardsStore.updateCard({ id: card.value.id, data: card.value })
+  saving.value = false
 }
-
 </script>
 
 <template>
@@ -26,7 +25,10 @@ async function onSave() {
     <h1>Config Panel</h1>
     <hr>
 
-    <div class="body">
+    <div
+      v-if="card"
+      class="body"
+    >
       <label>
         <div>Title</div>
         <input v-model="card.title">
@@ -60,7 +62,10 @@ async function onSave() {
       <button @click="onDelete">
         Delete
       </button>
-      <button @click="onSave">
+      <button
+        :disabled="saving"
+        @click="onSave"
+      >
         Save
       </button>
     </footer>
