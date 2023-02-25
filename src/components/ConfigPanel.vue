@@ -16,7 +16,7 @@ async function onDelete() {
 }
 
 async function onSave() {
-
+  cardsStore.updateCard({ id: card.value.id, data: card.value })
 }
 
 </script>

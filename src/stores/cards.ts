@@ -24,9 +24,20 @@ export const useCardsStore = defineStore('cards', () => {
     }
   }
 
-  function updateCard(id: number, data: Partial<Card>) {
-    const card = cards.value.get(id)
-    cards.value.set(id, Object.assign({}, card, data))
+  async function updateCard(params: { id: number, data: Partial<Card> }) {
+    const { id, data } = params
+    const { data: _card, error } = await supabase
+      .from('cards')
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single()
+
+    cards.value.set(id, _card)
+
+    if (error) throw error
+
+    return _card
   }
 
   async function createCard({ userId }: { userId: string }) {
