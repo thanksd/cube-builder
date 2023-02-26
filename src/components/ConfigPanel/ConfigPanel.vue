@@ -46,7 +46,7 @@ async function onSave() {
   }
 }
 
-async function updateCardArtImage(params: { file: Blob }) {
+async function updateCardArtImage(params: { file: any }) {
   const { file } = params
   const fileExt = file.name.split('.').pop()
   const filePath = `${Math.random()}.${fileExt}`

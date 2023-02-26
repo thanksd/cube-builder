@@ -29,7 +29,7 @@ async function onSave() {
   }
 }
 
-async function updateAvatar(params: { file: Blob }) {
+async function updateAvatar(params: { file: any }) {
   const { file } = params
   const fileExt = file.name.split('.').pop()
   const filePath = `${Math.random()}.${fileExt}`
