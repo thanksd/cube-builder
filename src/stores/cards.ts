@@ -45,7 +45,8 @@ export const useCardsStore = defineStore('cards', () => {
     return _card
   }
 
-  async function createCard({ userId }: { userId: string }) {
+  async function createCard(params: { userId: string }) {
+    const { userId } = params
     const payload = {
       title: '(Untitled Card)',
       created_by: userId
@@ -63,13 +64,16 @@ export const useCardsStore = defineStore('cards', () => {
     return { id: card.id }
   }
 
-  async function deleteCard({ id }: { id: number }) {
+  async function deleteCard(params: { id: number }) {
+    const { id } = params
     const { error } = await supabase
       .from('cards')
       .delete()
       .eq('id', id)
 
-    if (error) throw error;
+    cards.value.delete(id)
+
+    if (error) throw error
   }
 
   return {

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useCardsStore } from '@/stores/cards'
+import { useRouter } from 'vue-router';
 
 const cardsStore = useCardsStore()
+const router = useRouter()
 
 const card = ref(cardsStore.activeCard)
 console.log({ card })
@@ -11,13 +13,28 @@ const saving = ref(false)
 const deleting = ref(false)
 
 async function onDelete() {
-  if (card.value) cardsStore.deleteCard({ id: card.value.id })
+  if (!card.value) return;
+  try {
+    deleting.value = true
+    await cardsStore.deleteCard({ id: card.value.id })
+    router.push('/')
+  } catch (error) {
+    if (error instanceof Error) alert(error.message)
+  } finally {
+    deleting.value = false
+  }
 }
 
 async function onSave() {
-  saving.value = true
-  if (card.value) cardsStore.updateCard({ id: card.value.id, data: card.value })
-  saving.value = false
+  if (!card.value) return;
+  try {
+    saving.value = true
+    await cardsStore.updateCard({ id: card.value.id, data: card.value })
+  } catch (error) {
+    if (error instanceof Error) alert(error.message)
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 
