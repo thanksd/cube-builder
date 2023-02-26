@@ -10,9 +10,30 @@ const username = ref('')
 const saving = ref(false)
 const saved = ref(false)
 
-function updateAvatar({ filePath, file }: { filePath: string, file: Blob }) {
-  app.updateProfileAvatar(filePath)
-  avatarUrl.value = URL.createObjectURL(file)
+async function updateAvatar(params: { file: Blob }) {
+  const { file } = params
+
+  try {
+    saving.value = true
+
+    const fileExt = file.name.split('.').pop()
+    const filePath = `${Math.random()}.${fileExt}`
+
+    let { error: uploadError } = await supabase
+      .storage
+      .from('avatars')
+      .upload(filePath, file)
+
+    if (uploadError) throw uploadError
+
+    await app.updateProfileAvatar(filePath)
+    avatarUrl.value = URL.createObjectURL(file)
+
+  } catch (error: any) {
+    alert(error.message)
+  } finally {
+    saving.value = false
+  }
 }
 
 async function onUsernameSave() {
@@ -60,8 +81,10 @@ onMounted(async () => {
       Profile Avatar
       <ImageUpload
         v-model:src="avatarUrl"
-        :max-width="100"
-        :max-height="100"
+        class="image-upload"
+        :img-width="100"
+        :img-height="100"
+        :circle-border="true"
         @upload="updateAvatar"
       />
     </label>

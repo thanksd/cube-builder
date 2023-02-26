@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import { supabase } from '../lib/supabaseClient'
 
 const prop = defineProps({
   src: { type: String, default: '' },
-  maxWidth: { type: Number, default: 0 },
-  maxHeight: { type: Number, default: 0 }
+  disabled: { type: Boolean, default: false },
+  circleBorder: { type: Boolean, default: false },
+  imgWidth: { type: Number, default: 0 },
+  imgHeight: { type: Number, default: 0 }
 })
-const { src, maxWidth, maxHeight } = toRefs(prop)
+const { src, disabled, imgWidth, imgHeight } = toRefs(prop)
 
 const emit = defineEmits(['upload', 'update:src'])
-const uploading = ref(false)
 const showUpload = ref(false)
 const resizedFile = ref()
 
@@ -20,8 +20,8 @@ const onFileInputChange = async (e: any) => {
   img.src = URL.createObjectURL(file)
   img.onload = () => {
     const canvas = document.createElement('canvas')
-    const maxW = maxWidth.value
-    const maxH = maxHeight.value
+    const maxW = imgWidth.value
+    const maxH = imgHeight.value
     let { width, height } = img
     if (width > height) {
       if (maxW && width > maxW) {
@@ -54,34 +54,21 @@ const onFileInputChange = async (e: any) => {
   }
 }
 
-const uploadAvatar = async () => {
-  try {
-    uploading.value = true
-
-    const file = resizedFile.value
-    const fileExt = file.name.split('.').pop()
-    const filePath = `${Math.random()}.${fileExt}`
-
-    let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
-
-    if (uploadError) throw uploadError
-
-    emit('upload', { filePath, file })
-  } catch (error: any) {
-    alert(error.message)
-  } finally {
-    uploading.value = false
-  }
+function onUpload() {
+  emit('upload', { file: resizedFile.value })
 }
 </script>
 
 <template>
-  <div>
+  <div
+    class="image-upload"
+    :class="{ 'has-circle-border': circleBorder }"
+  >
     <div
       class="image-container"
       :style="{
-        width: maxWidth ? `${maxWidth}px` : 'initial',
-        height: maxHeight ? `${maxHeight}px` : 'initial'
+        width: imgWidth ? `${imgWidth}px` : 'initial',
+        height: imgHeight ? `${imgHeight}px` : 'initial'
       }"
     >
       <img
@@ -94,12 +81,12 @@ const uploadAvatar = async () => {
     <input
       type="file"
       accept="image/*"
-      :disabled="uploading"
+      :disabled="disabled"
       @change="onFileInputChange"
     >
     <button
       v-if="showUpload"
-      @click="uploadAvatar"
+      @click="onUpload"
     >
       Upload
     </button>
@@ -117,7 +104,7 @@ const uploadAvatar = async () => {
   border-radius: 4px;
 }
 
-.image-container::after {
+.has-circle-border > .image-container::after {
   content: '';
   position: absolute;
   width: 100%;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, type Ref } from 'vue'
 import MagicCard from '../components/MagicCard.vue'
-import ConfigPanel from '../components/ConfigPanel.vue'
+import ConfigPanel from '../components/ConfigPanel/ConfigPanel.vue'
 import { useCardsStore } from '@/stores/cards';
 import { useRoute } from 'vue-router'
 
