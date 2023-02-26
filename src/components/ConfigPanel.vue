@@ -5,6 +5,7 @@ import { useCardsStore } from '@/stores/cards'
 const cardsStore = useCardsStore()
 
 const card = ref(cardsStore.activeCard)
+console.log({ card })
 
 const saving = ref(false)
 const deleting = ref(false)

@@ -7,7 +7,7 @@ const props = defineProps({
   positionLocked: { type: Boolean, default: true }
 })
 
-const card = ref(Object.assign({}, props.card))
+const card = ref(props.card)
 const cardEl = ref();
 
 let updateDegInterval: number;
