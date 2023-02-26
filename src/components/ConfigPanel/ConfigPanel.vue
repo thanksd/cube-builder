@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useCardsStore } from '@/stores/cards'
 import { useRouter } from 'vue-router';
+import { supabase } from '@/lib/supabaseClient'
+import ImageUpload from '../ImageUpload.vue';
 
 const cardsStore = useCardsStore()
 const router = useRouter()
 
 const card = ref(cardsStore.activeCard)
-console.log({ card })
-
 const saving = ref(false)
 const deleting = ref(false)
+const imgUrl = ref('')
+const cardArtImgFile = ref()
 
 async function onDelete() {
   if (!card.value) return;
@@ -25,10 +27,17 @@ async function onDelete() {
   }
 }
 
+async function onUpdateFile(file: Blob) {
+  cardArtImgFile.value = file
+}
+
 async function onSave() {
   if (!card.value) return;
   try {
     saving.value = true
+    const file = cardArtImgFile.value
+    if (file) await updateCardArtImage({ file })
+    console.log({ id: card.value.id, data: card.value })
     await cardsStore.updateCard({ id: card.value.id, data: card.value })
   } catch (error) {
     if (error instanceof Error) alert(error.message)
@@ -36,6 +45,28 @@ async function onSave() {
     saving.value = false
   }
 }
+
+async function updateCardArtImage(params: { file: Blob }) {
+  const { file } = params
+  const fileExt = file.name.split('.').pop()
+  const filePath = `${Math.random()}.${fileExt}`
+
+  let { error: uploadError } = await supabase
+    .storage
+    .from('card-art')
+    .upload(filePath, file)
+
+  if (uploadError) throw uploadError
+
+  if (card.value) card.value.img = filePath
+}
+
+watch(() => card.value, async (value) => {
+  if (!value || !value.img) return
+  const { data, error } = await supabase.storage.from('card-art').download(value.img)
+  if (error) throw error
+  imgUrl.value = URL.createObjectURL(data)
+}, { immediate: true, deep: true })
 </script>
 
 <template>
@@ -53,8 +84,13 @@ async function onSave() {
       </label>
 
       <label>
-        <div>Image Url</div>
-        <input v-model="card.img">
+        <div>Card Art (252x206)</div>
+        <ImageUpload
+          v-model:src="imgUrl"
+          :img-width="252"
+          :img-height="206"
+          @update:file="onUpdateFile"
+        />
       </label>
 
       <label>

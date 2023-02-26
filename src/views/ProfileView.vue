@@ -5,47 +5,44 @@ import { useAppStore } from '@/stores/app'
 import { supabase } from '@/lib/supabaseClient'
 
 const app = useAppStore()
-const avatarUrl = ref('')
 const username = ref('')
+const avatarUrl = ref('')
+const avatarImg = ref()
 const saving = ref(false)
 const saved = ref(false)
 
-async function updateAvatar(params: { file: Blob }) {
-  const { file } = params
-
-  try {
-    saving.value = true
-
-    const fileExt = file.name.split('.').pop()
-    const filePath = `${Math.random()}.${fileExt}`
-
-    let { error: uploadError } = await supabase
-      .storage
-      .from('avatars')
-      .upload(filePath, file)
-
-    if (uploadError) throw uploadError
-
-    await app.updateProfileAvatar(filePath)
-    avatarUrl.value = URL.createObjectURL(file)
-
-  } catch (error: any) {
-    alert(error.message)
-  } finally {
-    saving.value = false
-  }
+function onUpdateFile(file: any) {
+  avatarImg.value = file
 }
 
-async function onUsernameSave() {
+async function onSave() {
   try {
     saving.value = true;
     await app.updateProfile({ username: username.value })
+    const file = avatarImg.value
+    if (file) await updateAvatar({ file })
   } catch (e) {
     if (e instanceof Error) alert(e.message)
   } finally {
     saved.value = true;
     saving.value = false;
   }
+}
+
+async function updateAvatar(params: { file: Blob }) {
+  const { file } = params
+  const fileExt = file.name.split('.').pop()
+  const filePath = `${Math.random()}.${fileExt}`
+
+  let { error: uploadError } = await supabase
+    .storage
+    .from('avatars')
+    .upload(filePath, file)
+
+  if (uploadError) throw uploadError
+
+  await app.updateProfileAvatar(filePath)
+  avatarUrl.value = URL.createObjectURL(file)
 }
 
 onMounted(async () => {
@@ -67,14 +64,6 @@ onMounted(async () => {
         v-model="username"
         :disabled="saving || saved"
       >
-      <button
-        :disabled="saving || saved"
-        @click="onUsernameSave"
-      >
-        <template v-if="saved">Saved!</template>
-        <template v-else-if="saving">Saving...</template>
-        <template v-else>Save</template>
-      </button>
     </label>
 
     <label>
@@ -82,12 +71,28 @@ onMounted(async () => {
       <ImageUpload
         v-model:src="avatarUrl"
         class="image-upload"
+        :disabled="saving"
         :img-width="100"
         :img-height="100"
         :circle-border="true"
-        @upload="updateAvatar"
+        @update:file="onUpdateFile"
       />
     </label>
+
+    <button
+      :disabled="saving || saved"
+      @click="onSave"
+    >
+      <template v-if="saved">
+        Saved!
+      </template>
+      <template v-else-if="saving">
+        Saving...
+      </template>
+      <template v-else>
+        Save
+      </template>
+    </button>
   </main>
 </template>
 

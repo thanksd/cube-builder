@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue';
 import type { Card } from '@/stores/cards';
+import { supabase } from '@/lib/supabaseClient';
 
 const props = defineProps({
   card: { type: Object as () => Card, required: true },
@@ -8,7 +9,8 @@ const props = defineProps({
 })
 
 const card = ref(props.card)
-const cardEl = ref();
+const cardEl = ref()
+const imgUrl = ref('')
 
 let updateDegInterval: number;
 
@@ -31,6 +33,13 @@ watch(() => props.positionLocked, () => {
   if (updateDegInterval) window.clearInterval(updateDegInterval)
   updateDegInterval = window.setInterval(updateDeg)
 })
+
+watch(() => card.value, async (value) => {
+  if (!value || !value.img) return
+  const { data, error } = await supabase.storage.from('card-art').download(value.img)
+  if (error) throw error
+  imgUrl.value = URL.createObjectURL(data)
+}, { immediate: true, deep: true })
 </script>
 
 <template>
@@ -44,8 +53,7 @@ watch(() => props.positionLocked, () => {
           {{ card.title }}
         </div>
         <div class="art">
-          <img :src="card.img">
-          {{ card.img }}
+          <img :src="imgUrl">
         </div>
         <div class="type-line">
           {{ card.type }}
@@ -74,6 +82,7 @@ watch(() => props.positionLocked, () => {
   --deg-x: calc(-1.2 * var(--deg) * var(--x));
   --deg-y: calc(1.2 * var(--deg) * var(--y));
   --deg-z: calc(var(--deg) * calc(var(--y) / 6 * var(--x) / 2));
+  --card-bg-color: rgb(89, 46, 38);
 
   font-family: 'Libre Baskerville', serif;
   position: relative;
@@ -115,7 +124,7 @@ watch(() => props.positionLocked, () => {
   bottom: 1rem;
   left: 1rem;
   right: 1rem;
-  background-color: rgb(89, 46, 38);
+  background-color: var(--card-bg-color);
   display: flex;
   flex-direction: column;
 }
@@ -136,13 +145,15 @@ watch(() => props.positionLocked, () => {
 .art {
   height: 50%;
   margin: 0 1rem;
+  background-color: rgba(255,255,255,0.5);
   overflow: hidden;
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .art img {
-  position: relative;
-  width: 100%;
+  max-width: 100%;
 }
 
 .rules-container {

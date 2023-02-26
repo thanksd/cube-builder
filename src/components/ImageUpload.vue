@@ -10,8 +10,7 @@ const prop = defineProps({
 })
 const { src, disabled, imgWidth, imgHeight } = toRefs(prop)
 
-const emit = defineEmits(['upload', 'update:src'])
-const showUpload = ref(false)
+const emit = defineEmits(['update:file', 'update:src'])
 const resizedFile = ref()
 
 const onFileInputChange = async (e: any) => {
@@ -48,14 +47,10 @@ const onFileInputChange = async (e: any) => {
         lastModified: Date.now()
       })
 
-      showUpload.value = true
       emit('update:src', URL.createObjectURL(resizedFile.value))
+      emit('update:file', resizedFile.value)
     }, 'image/jpeg', 0.9)
   }
-}
-
-function onUpload() {
-  emit('upload', { file: resizedFile.value })
 }
 </script>
 
@@ -84,12 +79,6 @@ function onUpload() {
       :disabled="disabled"
       @change="onFileInputChange"
     >
-    <button
-      v-if="showUpload"
-      @click="onUpload"
-    >
-      Upload
-    </button>
   </div>
 </template>
 
@@ -102,6 +91,7 @@ function onUpload() {
   align-items: center;
   border: 3px solid rgba(0, 0, 0, 0.75);
   border-radius: 4px;
+  background-color: white;
 }
 
 .has-circle-border > .image-container::after {
