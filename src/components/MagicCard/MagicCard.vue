@@ -2,6 +2,7 @@
 import { watch, ref } from 'vue';
 import type { Card } from '@/stores/cards';
 import { supabase } from '@/lib/supabaseClient';
+import RulesText from './RulesText.vue';
 
 const props = defineProps({
   card: { type: Object as () => Card, required: true },
@@ -59,9 +60,10 @@ watch(() => card.value, async (value) => {
           {{ card.type }}
         </div>
         <div class="rules-container">
-          <div class="rules-text">
-            {{ card.rules }}
-          </div>
+          <RulesText
+            :text="card.rules"
+            class="rules-text"
+          />
         </div>
         <div class="footer">
           Illus. {{ card.author }}
@@ -169,6 +171,8 @@ watch(() => card.value, async (value) => {
 
 .rules-text {
   margin: 0 0.4rem;
+  position: relative;
+  width: 100%;
 }
 
 .footer {
