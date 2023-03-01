@@ -10,6 +10,9 @@ export type Card = {
   type: string;
   rules: string;
   author: string;
+  mana_cost: string;
+  power: string;
+  toughness: string;
 }
 
 export const useCardsStore = defineStore('cards', () => {

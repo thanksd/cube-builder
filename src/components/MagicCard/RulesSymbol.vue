@@ -15,6 +15,7 @@ const symbols = computed(() => {
   <span
     v-for="(symbol, i) in symbols"
     :key="symbol + i"
+    class="rules-symbol"
   >
     <svg
       v-if="symbol === 'B'"
@@ -116,6 +117,11 @@ const symbols = computed(() => {
 <style scoped>
 svg {
   width: 1em;
+}
+
+.rules-symbol {
+  display: flex;
+  align-items: center;
 }
 
 span.other {

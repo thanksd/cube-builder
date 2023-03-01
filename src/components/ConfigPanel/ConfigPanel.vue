@@ -84,6 +84,11 @@ watch(() => card.value, async (value) => {
       </label>
 
       <label>
+        <div>Mana Cost</div>
+        <input v-model="card.mana_cost">
+      </label>
+
+      <label>
         <div>Card Art (252x206)</div>
         <ImageUpload
           v-model:src="imgUrl"
@@ -104,6 +109,16 @@ watch(() => card.value, async (value) => {
           v-model="card.rules"
           rows="6"
         />
+      </label>
+
+      <label>
+        <div>Power</div>
+        <input v-model="card.power">
+      </label>
+
+      <label>
+        <div>Toughness</div>
+        <input v-model="card.toughness">
       </label>
 
       <label>
@@ -148,5 +163,11 @@ h1 {
 label {
   display: flex;
   flex-direction: column;
+}
+
+footer {
+  margin-top: 2em;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

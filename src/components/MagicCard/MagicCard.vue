@@ -3,6 +3,7 @@ import { watch, ref } from 'vue';
 import type { Card } from '@/stores/cards';
 import { supabase } from '@/lib/supabaseClient';
 import RulesText from './RulesText.vue';
+import RulesSymbol from './RulesSymbol.vue';
 
 const props = defineProps({
   card: { type: Object as () => Card, required: true },
@@ -50,8 +51,13 @@ watch(() => card.value, async (value) => {
       class="card"
     >
       <div class="content">
-        <div class="title">
-          {{ card.title }}
+        <div class="header">
+          <div class="title">
+            {{ card.title }}
+          </div>
+          <div class="cost">
+            <RulesSymbol :value="card.mana_cost" />
+          </div>
         </div>
         <div class="art">
           <img :src="imgUrl">
@@ -64,6 +70,9 @@ watch(() => card.value, async (value) => {
             :text="card.rules"
             class="rules-text"
           />
+        </div>
+        <div class="stats-container">
+          {{ card.power }}/{{ card.toughness }}
         </div>
         <div class="footer">
           Illus. {{ card.author }}
@@ -131,10 +140,28 @@ watch(() => card.value, async (value) => {
   flex-direction: column;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cost {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  height: 1.2rem;
+  font-size: 1.1em;
+  line-height: 0.95rem;
+}
+
 .title, .type-line, .footer {
   height: 1.2rem;
   color: white;
   line-height: 1.2rem;
+}
+
+.footer, .header, .type-line {
   margin: 0 1rem;
 }
 
@@ -173,6 +200,19 @@ watch(() => card.value, async (value) => {
   margin: 0 0.4rem;
   position: relative;
   width: 100%;
+}
+
+.stats-container {
+  position: absolute;
+  bottom: 0.7rem;
+  right: 0.7rem;
+  background-color: bisque;
+  display: flex;
+  padding: 0.2rem 0.4rem;
+  border: 2px solid black;
+  font-size: 0.9rem;
+  border-radius: 0.4rem;
+  font-weight: bold;
 }
 
 .footer {
