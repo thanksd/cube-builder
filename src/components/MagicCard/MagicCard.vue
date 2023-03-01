@@ -56,7 +56,10 @@ watch(() => card.value, async (value) => {
             {{ card.title }}
           </div>
           <div class="cost">
-            <RulesSymbol :value="card.mana_cost" />
+            <RulesSymbol
+              v-if="card.mana_cost"
+              :value="card.mana_cost"
+            />
           </div>
         </div>
         <div class="art">
@@ -71,7 +74,10 @@ watch(() => card.value, async (value) => {
             class="rules-text"
           />
         </div>
-        <div class="stats-container">
+        <div
+          v-if="card.power || card.toughness"
+          class="stats-container"
+        >
           {{ card.power }}/{{ card.toughness }}
         </div>
         <div class="footer">
