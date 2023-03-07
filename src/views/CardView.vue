@@ -130,6 +130,7 @@ main {
 
   .card-section {
     width: 100%;
+    pointer-events: none;
   }
 }
 </style>
