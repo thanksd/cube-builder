@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useCardsStore } from '@/stores/cards'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabaseClient'
-import ImageUpload from '../ImageUpload.vue';
+import ImageUpload from '../ImageUpload.vue'
+import { toBlob } from 'html-to-image'
 
 const cardsStore = useCardsStore()
 const router = useRouter()
@@ -13,6 +14,7 @@ const saving = ref(false)
 const deleting = ref(false)
 const imgUrl = ref('')
 const cardArtImgFile = ref()
+const cardImg = ref()
 
 async function onDelete() {
   if (!card.value) return;
@@ -36,8 +38,8 @@ async function onSave() {
   try {
     saving.value = true
     const file = cardArtImgFile.value
+    card.value.full_img = await updateFullCardImage()
     if (file) await updateCardArtImage({ file })
-    console.log({ id: card.value.id, data: card.value })
     await cardsStore.updateCard({ id: card.value.id, data: card.value })
   } catch (error) {
     if (error instanceof Error) alert(error.message)
@@ -59,6 +61,28 @@ async function updateCardArtImage(params: { file: any }) {
   if (uploadError) throw uploadError
 
   if (card.value) card.value.img = filePath
+}
+
+async function updateFullCardImage() {
+  const data: Blob|null = await new Promise((resolve, reject) => {
+    const el = document.querySelector('.magic-card .card') as HTMLElement
+    if (el) {
+      toBlob(el)
+        .then((data) => resolve(data))
+        .catch(reject)
+    }
+  })
+  if (!data) return ''
+  const filePath = `${Math.random()}.png`
+
+  let { error: uploadError } = await supabase
+    .storage
+    .from('card-img')
+    .upload(filePath, data)
+
+  if (uploadError) throw uploadError
+
+  return filePath
 }
 
 watch(() => card.value, async (value) => {
@@ -126,6 +150,8 @@ watch(() => card.value, async (value) => {
         <input v-model="card.author">
       </label>
     </div>
+
+    <img ref="cardImg">
 
     <footer>
       <button @click="onDelete">

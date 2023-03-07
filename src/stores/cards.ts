@@ -7,6 +7,7 @@ export type Card = {
   created_at: string;
   title: string;
   img: string;
+  full_img: string;
   type: string;
   rules: string;
   author: string;
