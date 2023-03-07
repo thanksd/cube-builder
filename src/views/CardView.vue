@@ -68,6 +68,7 @@ function onMouseLeave() {
       @mouseleave="onMouseLeave"
     >
       <MagicCard
+        class="magic-card"
         :position-locked="cardPositionLocked"
         :card="card"
       />
@@ -100,9 +101,12 @@ main {
   position: relative;
   color: seashell;
   background-color: #0f0d0c;
-  /* min-width: 200px; */
   padding: 1rem;
   flex-grow: 1;
+}
+
+.magic-card {
+  margin: 2rem;
 }
 
 .gutter {
@@ -113,5 +117,19 @@ main {
   top: 0;
   left: 0;
   cursor: col-resize;
+}
+
+@media (max-width: 60rem) {
+  main {
+    flex-direction: column;
+  }
+
+  .gutter {
+    pointer-events: none;
+  }
+
+  .card-section {
+    width: 100%;
+  }
 }
 </style>

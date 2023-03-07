@@ -54,7 +54,6 @@ export const useAppStore = defineStore('app', () => {
     await updateProfile({ avatar_url: avatarUrl })
 
     profile.value.avatar_url = avatarUrl;
-
   }
 
   return {
