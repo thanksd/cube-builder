@@ -78,8 +78,6 @@ onBeforeMount(async () => {
     >
       (login to create new cards)
     </RouterLink>
-
-    {{ cardImageMap }}
   </main>
 </template>
 
