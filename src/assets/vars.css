@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  --card-font: 'Libre Baskerville', serif;
+  --color-green: rgb(0, 115, 62);
+  --color-green-bg: rgb(196, 211, 202);
+  --color-blue: rgb(14, 104, 171);
+  --color-blue-bg: rgb(179, 206, 234);
+  --color-red: rgb(211, 32, 42);
+  --color-red-bg: rgb(235, 159, 130);
+  --color-white: rgb(249, 250, 244);
+  --color-white-bg: rgb(248, 231, 185);
+  --color-black: rgb(21, 11, 0);
+  --color-black-bg: rgb(166, 159, 157);
+}

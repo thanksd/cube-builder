@@ -3,7 +3,7 @@ import { watch, ref } from 'vue';
 import type { Card } from '@/stores/cards';
 import { supabase } from '@/lib/supabaseClient';
 import RulesText from './RulesText.vue';
-import RulesSymbol from './RulesSymbol.vue';
+import CardHeader from './CardHeader.vue';
 
 const props = defineProps({
   card: { type: Object as () => Card, required: true },
@@ -51,17 +51,11 @@ watch(() => card.value, async (value) => {
       class="card"
     >
       <div class="content">
-        <div class="header">
-          <div class="title">
-            {{ card.title }}
-          </div>
-          <div class="cost">
-            <RulesSymbol
-              v-if="card.mana_cost"
-              :value="card.mana_cost"
-            />
-          </div>
-        </div>
+        <CardHeader
+          class="header"
+          :title="card.title"
+          :cost="card.mana_cost"
+        />
         <div class="art">
           <img :src="imgUrl">
         </div>
@@ -89,8 +83,6 @@ watch(() => card.value, async (value) => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
-
 .card {
   --n: 0;
   --deg: calc(var(--n) * 1deg);
@@ -101,7 +93,7 @@ watch(() => card.value, async (value) => {
   --deg-z: calc(var(--deg) * calc(var(--y) / 6 * var(--x) / 2));
   --card-bg-color: rgb(89, 46, 38);
 
-  font-family: 'Libre Baskerville', serif;
+  font-family: var(--card-font);
   position: relative;
   font-size: .79rem;
   width: 25em;
@@ -146,35 +138,14 @@ watch(() => card.value, async (value) => {
   flex-direction: column;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cost {
-  flex-grow: 1;
-  display: flex;
-  justify-content: flex-end;
-  height: 1.2rem;
-  font-size: 1.1em;
-  line-height: 0.95rem;
-}
-
-.title, .type-line, .footer {
+.type-line, .footer {
   height: 1.2rem;
   color: white;
   line-height: 1.2rem;
 }
 
-.footer, .header, .type-line {
+.header, .type-line, .footer {
   margin: 0 1rem;
-}
-
-.title {
-  font-size: 0.85rem;
-  height: 1.4rem;
-  line-height: 1.4rem;;
 }
 
 .art {
