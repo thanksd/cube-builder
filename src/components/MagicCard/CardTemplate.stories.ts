@@ -25,7 +25,7 @@ const defaultArgs = {
   type: 'Creature - Phyrexian Bird',
   power: '1',
   toughness: '4',
-  rules: "Flying\nGitaxian Raptor enters the battlefield with three oil counters on it.\nRemove an oil counter from Gitaxian Raport: Gitaxian Raptor gets +1/-1 until end of turn.",
+  rules: "Flying\nGitaxian Raptor enters the battlefield with three oil counters on it.\nRemove an oil counter from Gitaxian Raptor: Gitaxian Raptor gets +1/-1 until end of turn.",
   author: 'Maxime Minard',
   imgUrl: 'https://cards.scryfall.io/art_crop/front/4/f/4f5e95f8-c04d-405f-bba4-e83a8f6bf463.jpg?1675956964'
 }

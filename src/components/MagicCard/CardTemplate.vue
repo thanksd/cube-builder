@@ -80,10 +80,10 @@ watch(() => props.color, async (val) => {
 
 .magic-card-template::before {
   content: '';
-  background-color: lightskyblue;
+  background-color: #74A9F6;
   position: absolute;
   top: 0;
-  bottom: 2em;
+  bottom: 2.1em;
   width: 100%;
   border-radius: 0.4em 0.4em 2em 2em;
   z-index: 0;
@@ -93,12 +93,19 @@ watch(() => props.color, async (val) => {
   margin: 0.3em 0.2em 0 0.2em;
   height: 2em;
   font-size: 1.2em;
+  box-shadow:
+    -0.16em 0.1em 0.08em rgba(0,0,0,0.7),
+    0em -0.2em 0.1em rgba(255,255,255,0.3),
+    0.2em 0em 0.1em rgba(255,255,255,0.3);
 }
 
 .type-line {
   margin: 0 0.2em;
   height: 2em;
   font-size: 1.2em;
+  box-shadow:
+    -0.16em 0.1em 0.08em rgba(0,0,0,0.7),
+    0.2em 0.1em 0.1em rgba(255,255,255,0.3);
 }
 
 .art {
@@ -110,6 +117,9 @@ watch(() => props.color, async (val) => {
   display: flex;
   justify-content: center;
   border: 0.25em solid var(--card-color);
+  box-shadow:
+    -0.16em 0.1em 0.08em rgba(0,0,0,0.7),
+    0.2em 0.1em 0.1em rgba(255,255,255,0.3);
 }
 
 .art img {
@@ -127,6 +137,11 @@ watch(() => props.color, async (val) => {
   align-items: center;
   line-height: 0.9em;
   border: 0.25em solid var(--card-color);
+  box-shadow:
+    inset -0.1em 0.1em 0.08em rgba(0,0,0,0.4),
+    inset 0.1em -0.1em 0.08em rgba(255,255,255,0.6),
+    -0.16em 0.1em 0.08em rgba(0,0,0,0.7),
+    0.2em 0.1em 0.1em rgba(255,255,255,0.3);
 }
 
 .rules-text {
@@ -138,15 +153,26 @@ watch(() => props.color, async (val) => {
 
 .stats-container {
   position: absolute;
-  bottom: 0.7em;
-  right: 0.7em;
+  bottom: 0.45em;
+  right: 0.1em;
   background-color: var(--card-color-bg);
   display: flex;
-  padding: 0.2em 0.4em;
-  border: 2px solid black;
-  font-size: 0.9em;
-  border-radius: 0.4em;
-  font-weight: bold;
+  padding: 0.2em 0.6em 0em 0.6em;
+  border: 0.14em solid var(--card-color-bg);
+  box-shadow:
+    inset -0.1em 0.12em 0.08em rgba(0,0,0,0.4),
+    inset 0.01em -0.01em 0.8em rgba(0,0,0,0.1),
+    -2px 8px 8px rgba(0,0,0,0.9);
+  font-size: 1.4em;
+  border-radius: 0.8em / 2em;
+  letter-spacing: 0.06em;
+}
+
+.stats-container::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .footer {
