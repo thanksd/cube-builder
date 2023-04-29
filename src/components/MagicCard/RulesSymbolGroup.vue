@@ -127,6 +127,7 @@ const symbols = computed(() => {
   font-family: var(--card-font);
   display: inline-flex;
   align-items: center;
+  gap: 0.03em;
 }
 
 .has-shadow .rules-symbol {
@@ -145,19 +146,20 @@ const symbols = computed(() => {
 }
 
 svg {
-  width: 1em;
+  width: 0.9em;
 }
 
 div.other {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 1em;
-  width: 1em;
+  height: 0.9em;
+  width: 0.9em;
   background-color: rgb(207, 194, 201);
 }
 
 div.other span {
   font-size: 0.9em;
+  line-height: 0.5em;
 }
 </style>

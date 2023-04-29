@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import RulesSymbol from './RulesSymbol.vue';
+import RulesSymbolGroup from './RulesSymbolGroup.vue';
 
 const props = defineProps({
   text: { type: String, default: '' }
@@ -29,7 +29,7 @@ const lines = computed(() => {
         v-for="(word, j) in line"
         :key="`line-${i}-word-${j}`"
       >
-        <RulesSymbol
+        <RulesSymbolGroup
           v-if="word.startsWith('{') && word.endsWith('}')"
           :value="word"
         />
@@ -40,7 +40,7 @@ const lines = computed(() => {
       </template>
     </div>
   </div>
-</template>/img/1499805797.png
+</template>
 
 <style scoped>
 .rules-text {
