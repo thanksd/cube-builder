@@ -19,8 +19,6 @@ export default meta;
 type Story = StoryObj<typeof MagicCard>;
 
 const defaultArgs = {
-  title: 'Skullclamp',
-  cost: '{1}'
 }
 
 export const Basic: Story = {

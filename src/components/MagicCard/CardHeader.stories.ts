@@ -33,7 +33,6 @@ export const Basic: Story = {
 export const White: Story = {
   args: {
     ...defaultArgs,
-    color: 'white',
     cost: '{1}{W}'
   }
 }
@@ -41,7 +40,6 @@ export const White: Story = {
 export const Blue: Story = {
   args: {
     ...defaultArgs,
-    color: 'blue',
     cost: '{1}{U}'
   }
 }
@@ -49,7 +47,6 @@ export const Blue: Story = {
 export const Black: Story = {
   args: {
     ...defaultArgs,
-    color: 'black',
     cost: '{1}{B}'
   }
 }
@@ -57,7 +54,6 @@ export const Black: Story = {
 export const Red: Story = {
   args: {
     ...defaultArgs,
-    color: 'red',
     cost: '{1}{R}'
   }
 }
@@ -65,7 +61,6 @@ export const Red: Story = {
 export const Green: Story = {
   args: {
     ...defaultArgs,
-    color: 'green',
     cost: '{1}{G}'
   }
 }
